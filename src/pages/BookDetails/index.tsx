@@ -4,7 +4,8 @@ import { AppLoading } from "expo";
 import * as Linking from "expo-linking";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-import api, { apiKey } from "../../services/api";
+import api from "../../services/api";
+import apiKey from "../../services/secret";
 
 import {
   Container,
