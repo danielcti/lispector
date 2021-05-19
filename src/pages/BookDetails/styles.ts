@@ -67,6 +67,10 @@ export const BookDescriptionButtonText = styled.Text`
 `;
 
 export const BuyBookInfo = styled.View``;
-export const BuyBookPrice = styled.Text``;
-export const BuyBookButton = styled.TouchableOpacity``;
+export const BuyBookPrice = styled.Text`
+margin: 10px 0;
+`;
+export const BuyBookButton = styled.TouchableOpacity`
+margin-bottom: 10px;
+`;
 export const BuyBookButtonText = styled.Text``;

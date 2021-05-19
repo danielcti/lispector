@@ -3,6 +3,7 @@ import { ScrollView, Image } from "react-native";
 import { AppLoading } from "expo";
 import * as Linking from "expo-linking";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import HTML from "react-native-render-html";
 
 import api from "../../services/api";
 import apiKey from "../../services/secret";
@@ -75,24 +76,16 @@ const BookDetails: React.FC = () => {
       key: apiKey,
     };
 
-    api
-      .get<Book>(routeParams.id, { params })
-      .then((response) => {
-        const {
-          selfLink,
-          volumeInfo,
-          saleInfo,
-          accessInfo,
-          id,
-        } = response.data;
-        setBook({
-          selfLink,
-          volumeInfo,
-          saleInfo,
-          accessInfo,
-          id,
-        });
+    api.get<Book>(routeParams.id, { params }).then((response) => {
+      const { selfLink, volumeInfo, saleInfo, accessInfo, id } = response.data;
+      setBook({
+        selfLink,
+        volumeInfo,
+        saleInfo,
+        accessInfo,
+        id,
       });
+    });
   }, []);
 
   function handleNavigateBack(removeBook: boolean) {
@@ -145,22 +138,24 @@ const BookDetails: React.FC = () => {
             </BookContentContainer>
           </BookTopContainer>
           <BookBottomContainer>
-            <BookDescription>
-              <BookDescriptionText
-                numberOfLines={fullDescription ? 0 : 5}
-                ellipsizeMode="tail"
-              >
-                {book.volumeInfo.description}
-              </BookDescriptionText>
-              <BookDescriptionButton>
-                <BookDescriptionButtonText
-                  onPress={() => setFullDescription(!fullDescription)}
+            {book.volumeInfo.description && (
+              <BookDescription>
+                <BookDescriptionText
+                  numberOfLines={fullDescription ? 0 : 5}
+                  ellipsizeMode="tail"
                 >
-                  {fullDescription ? "Ler menos" : "Ler mais"}
-                </BookDescriptionButtonText>
-              </BookDescriptionButton>
-            </BookDescription>
-            {book.saleInfo.saleability !== "NOT_FOR_SALE" && (
+                  {book.volumeInfo.description}
+                </BookDescriptionText>
+                <BookDescriptionButton>
+                  <BookDescriptionButtonText
+                    onPress={() => setFullDescription(!fullDescription)}
+                  >
+                    {fullDescription ? "Ler menos" : "Ler mais"}
+                  </BookDescriptionButtonText>
+                </BookDescriptionButton>
+              </BookDescription>
+            )}
+            {book.saleInfo.saleability === "FOR_SALE" && (
               <BuyBookInfo>
                 <BuyBookPrice>
                   {String(book.saleInfo.listPrice.amount)}
@@ -171,7 +166,9 @@ const BookDetails: React.FC = () => {
                 </BuyBookButton>
               </BuyBookInfo>
             )}
-            <TouchableOpacity onPress={() => handleNavigateBack(true)}>
+            <TouchableOpacity
+            style={{marginVertical: 10}}
+            onPress={() => handleNavigateBack(true)}>
               <Text>Remover livro dos favoritos</Text>
             </TouchableOpacity>
           </BookBottomContainer>
